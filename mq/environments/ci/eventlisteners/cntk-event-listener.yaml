@@ -7,21 +7,25 @@ metadata:
 spec:
   serviceAccountName: pipeline
   triggers:
-  - bindings:
-    - kind: TriggerBinding
-      ref: cnkt-trigger-binding
+  - name: mq-qm01-dev
     interceptors:
-    - cel:
-        filter: header.match('X-GitHub-Event', 'push') && body.ref == 'refs/heads/qm1-tutorial-org-123-fvdm' && body.repository.full_name == 'tutorial-org-123-fvdm/mq-qm01'
-    name: mq-qm01-dev
+      - ref:
+          name: "cel"
+        params:
+        - name: "filter"
+          value: "header.match('X-GitHub-Event', 'push') && body.ref == 'refs/heads/qm1-tutorial-org-123-fvdm' && body.repository.full_name == 'tutorial-org-123-fvdm/mq-qm01'"
+    bindings:
+      - ref: cnkt-trigger-binding
     template:
       ref: mq-qm-dev
-  # - bindings:
-  #   - kind: TriggerBinding
-  #     ref: cnkt-trigger-binding
+  # - name: mq-spring-app-dev
   #   interceptors:
-  #   - cel:
-  #       filter: header.match('X-GitHub-Event', 'push') && body.ref == 'refs/heads/master' && body.repository.full_name == 'tutorial-org-123-fvdm/mq-spring-app'
-  #   name: mq-spring-app-dev
+  #     - ref:
+  #         name: "cel"
+  #       params:
+  #       - name: "filter"
+  #         value: "header.match('X-GitHub-Event', 'push') && body.ref == 'refs/heads/master' && body.repository.full_name == 'tutorial-org-123-fvdm/mq-spring-app'"
+  #   bindings:
+  #     - ref: cnkt-trigger-binding
   #   template:
   #     ref: mq-spring-app-dev
